@@ -3,6 +3,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIntValidator
 
 
+"""
+TODO: Fix layout
+TODO: Connect to excel parser
+TODO: Compile and create executable
+"""
+
+
 class SensorGUI(QWidget):
     def __init__(self, parent = None):
         super(SensorGUI, self).__init__(parent)

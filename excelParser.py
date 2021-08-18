@@ -5,6 +5,11 @@ Created on Mon Mar  1 03:38:11 2021
 @author: Clyde
 """
 
+"""
+TODO: Clean up code
+TODO: Make more efficient
+"""
+
 import numpy as np
 import pandas as pd
 
