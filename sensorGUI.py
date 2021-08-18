@@ -37,6 +37,7 @@ class filedialogdemo(QWidget):
     def printer(self):
         self.fileName.setText(self.fname)
         print(self.fname)
+        pront('testoing lsoa')
 
 def main():
     app = QApplication(sys.argv)
