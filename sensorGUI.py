@@ -3,35 +3,46 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIntValidator
 
 
-class filedialogdemo(QWidget):
+class SensorGUI(QWidget):
     def __init__(self, parent = None):
-        super().__init__(parent)
+        super(SensorGUI, self).__init__(parent)
         self.fname = ''
+        self.setFixedSize(640, 150)
         self.initUI()
 
     def initUI(self):
         print("YO ", self.fname)
-        layout = QVBoxLayout()
+        vbox = QVBoxLayout()
+        hbox = QHBoxLayout()
 
+        vbox.addWidget(QLabel("What File Type Is The Sensor Data?"))
+
+        self.radiobutton = QRadioButton("CSV")
+        self.radiobutton.type = "csv"
+        hbox.addWidget(self.radiobutton)
+
+        self.radiobutton = QRadioButton("EXCEL")
+        self.radiobutton.type = "excel"
+        hbox.addWidget(self.radiobutton)
+
+        vbox.addLayout(hbox)
         self.fileName = QLabel("")
-
-        layout.addWidget(self.fileName)
+        vbox.addWidget(self.fileName)
 
         self.btn = QPushButton("Choose Sensor Excel File")
         self.btn.clicked.connect(self.getfile)
-        layout.addWidget(self.btn)
+        vbox.addWidget(self.btn)
 
         self.contents = QLineEdit()
-        self.contents.setPlaceholderText("JOI")
+        self.contents.setPlaceholderText("Enter Num of Columns for Field Weather")
         self.contents.setValidator(QIntValidator())
-        layout.addWidget(self.contents)
-        self.setLayout(layout)
+        vbox.addWidget(self.contents)
+        self.setLayout(vbox)
         self.setWindowTitle("Field Sensor Parser")
         print("END")
 
     def getfile(self):
         self.fname = QFileDialog.getOpenFileName(self)[0]
-        #self.fname = "LPOLOL"
         self.printer()
 
     def printer(self):
@@ -40,7 +51,7 @@ class filedialogdemo(QWidget):
 
 def main():
     app = QApplication(sys.argv)
-    ex = filedialogdemo()
+    ex = SensorGUI()
     ex.show()
     sys.exit(app.exec_())
 
