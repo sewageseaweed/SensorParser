@@ -10,7 +10,7 @@
 7. Launch the application by running ```python sensorGUI.py```
 8. A GUI should open in a few seconds.
 
-## Linux/Mac Installation Process:
+## Linux/MacOS Installation Process:
 1. Almost entireley the same as the windows installation process. However, you can just use the builtin command line/terminal instead of the Anaconda Prompt.
 2. If you use the builtin command line/terminal, you can use the ```ls``` command to get a list of files/directories in your current directory instead of using the ```dir``` command.
 
