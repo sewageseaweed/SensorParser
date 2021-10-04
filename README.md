@@ -1,5 +1,4 @@
-# SensorParser
-Field sensor parser for SmartWash
+# Sensor Parser for SmartWash
 
 ## Windows Installation Process: 
 1. Install Anaconda from the following link: [https://www.anaconda.com/products/individual](https://www.anaconda.com/products/individual)
