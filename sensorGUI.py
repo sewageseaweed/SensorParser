@@ -15,7 +15,9 @@ class SensorGUI(QWidget):
     def __init__(self, parent = None):
         super(SensorGUI, self).__init__(parent)
         self.fname = ''
-        self.setFixedSize(650, 250)
+        self.metafname1 = ''
+        self.metafname2 = ''
+        #self.setFixedSize(650, 100)
         self.initUI()
 
     def initUI(self):
@@ -64,6 +66,40 @@ class SensorGUI(QWidget):
         self.parseBtn.clicked.connect(self.parseInfo)
         vbox.addWidget(self.parseBtn)
 
+        vbox.addWidget(QLabel("\n\n\nParsing Meta Data?:"))
+
+        vbox.addWidget(QLabel("\n\nFile 1 file type:"))
+        self.file1Drop = QComboBox()
+        self.file1Drop.addItem("CSV")
+        self.file1Drop.addItem("XLSX")
+        vbox.addWidget(self.file1Drop)
+
+        vbox.addLayout(hbox)
+        self.metaFileName1 = QLabel("")
+        vbox.addWidget(self.metaFileName1)
+
+        self.metabtn1 = QPushButton("Choose 1st Meta Data File")
+        self.metabtn1.clicked.connect(self.getMetaFile1)
+        vbox.addWidget(self.metabtn1)
+
+        vbox.addWidget(QLabel("\n\nFile 2 file type:"))
+        self.file2Drop = QComboBox()
+        self.file2Drop.addItem("CSV")
+        self.file2Drop.addItem("XLSX")
+        vbox.addWidget(self.file2Drop)
+
+        vbox.addLayout(hbox)
+        self.metaFileName2 = QLabel("")
+        vbox.addWidget(self.metaFileName2)
+
+        self.metabtn2 = QPushButton("Choose 2nd Meta Data File")
+        self.metabtn2.clicked.connect(self.getMetaFile2)
+        vbox.addWidget(self.metabtn2)
+
+        self.parseMeta = QPushButton("Parse Meta Data")
+        self.parseMeta.clicked.connect(self.parseMetaInfo)
+        vbox.addWidget(self.parseMeta)
+
         self.setLayout(vbox)
         self.setWindowTitle("Field Sensor Parser")
 
@@ -74,6 +110,14 @@ class SensorGUI(QWidget):
         self.fname = QFileDialog.getOpenFileName(self)[0]
         self.printer()
 
+    def getMetaFile1(self):
+        self.metafname1 = QFileDialog.getOpenFileName(self)[0]
+        self.metaFileName1.setText(self.metafname1)
+
+    def getMetaFile2(self):
+        self.metafname2 = QFileDialog.getOpenFileName(self)[0]
+        self.metaFileName2.setText(self.metafname2)
+
     def printer(self):
         self.fileName.setText(self.fname)
         print(self.fname)
@@ -82,7 +126,7 @@ class SensorGUI(QWidget):
         print('starting Parse')
         print(self.fname)
         message = QMessageBox()
-        message.setWindowTitle("Current Status")
+        message.setWindowTitle("Current Status Of Info Parse")
         if str(self.combo.currentText()) == "Field" or str(self.combo.currentText()) == "Both":
             message.setText("Currently Processing Field Weather. Do not exit!")
             message.exec_()
@@ -94,6 +138,24 @@ class SensorGUI(QWidget):
         message.setText("Finished! You may exit!")
         message.exec_()
         print('finished Parse')
+
+    def parseMetaInfo(self):
+        csv1 = True
+        csv2 = True
+        print(self.metafname1)
+        if(self.file1Drop.currentText() != "CSV"):
+            csv1 = False
+        if(self.file2Drop.currentText() != "CSV"):
+            csv2 = False
+        metaMessage = QMessageBox()
+        metaMessage.setWindowTitle("Current Status of Meta Data")
+        metaMessage.setText("Currently Processing Meta Data. Do not exit!")
+        metaMessage.exec_()
+        metaSamples(self.metafname1, self.metafname2, csv1, csv2)
+        message.setText("Finished! You may exit!")
+        message.exec_()
+
+
 
 
 def main():

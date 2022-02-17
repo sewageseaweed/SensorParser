@@ -16,6 +16,46 @@ TODO: Clean up code
 TODO: Make more efficient
 """
 
+# Meta Data
+
+
+def metaSamples(path1, path2, type1, type2):
+    if csv:
+        df = pd.read_csv(path1, encoding='unicode_escape')
+    else:
+        df = pd.read_excel(path1)
+
+    if csv2:
+        df2 = pd.read_csv(path2, encoding='unicode_escape')
+    else:
+        df2 = pd.read_excel(path2)
+    fieldDF = pd.DataFrame(columns = ['SampleType', 'SampleSubType', 'RawDate', 'SpecificSampler', 'GPS', 'Barcode', 'Media', 'Notes', 'ExperimentsID'])
+    fieldresDF = pd.DataFrame(columns = ['Lab', 'Method', 'Date', 'Time', 'SamplesID', 'Result'])
+
+    df2.rename(columns={"Sample Type": "SampleType", "Sample subtype": "SampleSubType", "Sample Barcode": "Barcode"}, inplace=True)
+
+    count = 0
+
+    for index, row in df2.iterrows():
+        check = False
+        print(count)
+        for inner_index, inner_row in df.iterrows():
+            desc = inner_row['Description'].split(':')
+            if len(desc) == 2:
+                if desc[1].strip() == row['Barcode']:
+                    if not check:
+                        new_row = pd.Series(data={'SampleType': row['SampleType'], 'SampleSubType': row['SampleSubType'], 'RawDate': row['Date'], 'SpecificSampler': row['UserName'], 'GPS': row['GPS'], 'Barcode': row['Barcode'], 'Media': row['Picture: of sample'], 'Notes': row['Notes']})
+                        fieldDF = fieldDF.append(new_row, ignore_index=True)
+                        check = True
+                    dateTime = inner_row['Date Received'].split()
+                    new_row = pd.Series(data={'Lab': inner_row['Lab'], 'Method': inner_row['Method'], 'Date': dateTime[0], 'Time': dateTime[1], 'SamplesID': 0, 'Result': inner_row['Test Result']})
+                    fieldresDF = fieldresDF.append(new_row, ignore_index=True)
+        count += 1
+
+    fieldDF.to_excel(path1 + "_samples.xlsx")
+    fieldresDF.to_excel(path2 + "_samples_results.xlsx")
+
+
 # FIELD WEATHER
 
 
@@ -89,7 +129,7 @@ def fieldWeather(path, start, csv):
                 df3 = df3.append(new_row, ignore_index=True)
                 count += 1
 
-    df3.to_excel(r"C:\Users\Clyde\Desktop\SmartWash\sensors.xlsx")
+    df3.to_excel(path + "_fieldWeather.xlsx")
 
 
 # RANCH WEATHER BELOW
@@ -152,7 +192,7 @@ def ranchWeather(path, end, csv):
                 df3 = df3.append(new_row, ignore_index=True)
                 count2 += 1
 
-    df3.to_excel(r"C:\Users\csumagang\Desktop\SmartWash_2020\ranch_sensors2_new2.xlsx")
+    df3.to_excel(path + "_ranchWeather.xlsx")
 
 
 # SAMPLES BELOW
@@ -198,9 +238,9 @@ def createSamples(path, start):
 
         count+=1
 
-    df3.to_excel(r"C:\Users\csumagang\Desktop\SmartWash_2020\Jul7_New_ResultsData2.xlsx")
-    offFieldDF.to_excel(r"C:\Users\csumagang\Desktop\SmartWash_2020\Jul_OffFieldSamp.xlsx")
-    offFieldresDF.to_excel(r"C:\Users\csumagang\Desktop\SmartWash_2020\Jul_OffFieldRes.xlsx")
+    df3.to_excel(path + "_New_ResultsData2.xlsx")
+    offFieldDF.to_excel(path + "_OffFieldSamp.xlsx")
+    offFieldresDF.to_excel(path + "_OffFieldRes.xlsx")
 
 
 # GENERATE FIELD WEATHER LIST
