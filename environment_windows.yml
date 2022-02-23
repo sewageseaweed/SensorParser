@@ -1,0 +1,50 @@
+name: sensor
+channels:
+  - defaults
+dependencies:
+  - _libgcc_mutex
+  - altgraph
+  - blas
+  - bottleneck
+  - ca-certificates
+  - certifi
+  - expat
+  - freetype
+  - glib
+  - gst-plugins-base
+  - gstreamer
+  - icu
+  - intel-openmp
+  - jpeg
+  - libffi
+  - libpng
+  - libxml2
+  - macholib
+  - mkl
+  - mkl-service
+  - mkl_fft
+  - mkl_random
+  - numexpr
+  - numpy
+  - numpy-base
+  - openssl
+  - pandas
+  - pcre
+  - pip
+  - pycryptodome
+  - pyinstaller
+  - pyqt
+  - python=3.9.6
+  - python-dateutil
+  - pytz
+  - qt
+  - setuptools
+  - sip
+  - six
+  - sqlite
+  - tk
+  - tzdata
+  - wheel
+  - xz
+  - zlib
+prefix: /home/clyde/anaconda3/envs/sensor
