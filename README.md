@@ -15,7 +15,9 @@
 2. If you use the builtin command line/terminal, you can use the ```ls``` command to get a list of files/directories in your current directory instead of using the ```dir``` command.
 
 ## Notes:
+- ***You may need to install "openpyxl" manually using the following command: conda install -c anaconda openpyxl***
 - Do not exit until the "Current Status" window says "Finished! You may exit!". Parsing sometimes takes awhile and you don't want to lose all your progress before it finishes...
+- You can hit "OK" on the message box. Just don't exit until the program says it has finished running.
 - 3 months seem to be ideal.
 - I ran this on a powerful machine (RTX 3090, Ryzen 9 5900x, and on a SSD) so it may take longer on less powerful machines. 
-- ***You may need to install "openpyxl" manually using the following command: conda install -c anaconda openpyxl***
+
