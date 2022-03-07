@@ -17,4 +17,5 @@
 ## Notes:
 - Do not exit until the "Current Status" window says "Finished! You may exit!". Parsing sometimes takes awhile and you don't want to lose all your progress before it finishes...
 - 3 months seem to be ideal.
-- I ran this on a powerful machine (RTX 3090, Ryzen 9 5900x, and on a SSD) so it may take longer on less powerful machines.  
+- I ran this on a powerful machine (RTX 3090, Ryzen 9 5900x, and on a SSD) so it may take longer on less powerful machines. 
+- **You may need to install "openpyxl" manually using the following command: conda install -c anaconda openpyxl **
