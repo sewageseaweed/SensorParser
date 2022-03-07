@@ -21,7 +21,7 @@ TODO: Make more efficient
 
 def metaSamples(path1, path2, type1, type2):
     if csv:
-        df = pd.read_csv(path1, encoding='unicode_escape')
+        df = pd.read_csv(path1, encoding='unicode_escape', on_bad_lines='skip', skiprows=5)
     else:
         df = pd.read_excel(path1)
 
@@ -54,6 +54,7 @@ def metaSamples(path1, path2, type1, type2):
 
     fieldDF.to_excel(path1 + "_samples.xlsx")
     fieldresDF.to_excel(path2 + "_samples_results.xlsx")
+    return
 
 
 # FIELD WEATHER
@@ -62,7 +63,7 @@ def metaSamples(path1, path2, type1, type2):
 def fieldWeather(path, start, csv):
     print("HERE I AM")
     if csv:
-        df = pd.read_csv(path, encoding='unicode_escape')
+        df = pd.read_csv(path, encoding='unicode_escape', on_bad_lines='skip', skiprows=5)
     else:
         df = pd.read_excel(path)
 
@@ -130,13 +131,15 @@ def fieldWeather(path, start, csv):
                 count += 1
 
     df3.to_excel(path + "_fieldWeather.xlsx")
+    return
 
 
 # RANCH WEATHER BELOW
 
 def ranchWeather(path, end, csv):
+    end = int(end) + 1
     if csv:
-        df = pd.read_csv(path, encoding='unicode_escape')
+        df = pd.read_csv(path, encoding='unicode_escape', on_bad_lines='skip', skiprows=5)
     else:
         df = pd.read_excel(path)
 
@@ -163,6 +166,7 @@ def ranchWeather(path, end, csv):
     count2 = 0
     tracker = 0
     df4_columns = list(df2.columns)
+    #print("TGEGEGE", df4_columns)
     for index, row in df2.iterrows():
         for j in df4_columns:
             print(tracker)
@@ -193,6 +197,7 @@ def ranchWeather(path, end, csv):
                 count2 += 1
 
     df3.to_excel(path + "_ranchWeather.xlsx")
+    return
 
 
 # SAMPLES BELOW
@@ -251,6 +256,7 @@ def generateFieldWeatherList():
     df_weather_sensors['FieldWeatherSensor'] = df3['Sensor Type'].unique
 
     df_weather_sensors.to_excel(r"C:\Users\csumagang\Desktop\SmartWash_2020\field_weather_sensor_list.xlsx")
+    return
 
 
 # GENERATE RANCH WEATHER LIST
@@ -261,3 +267,4 @@ def generateRanchWeatherList():
     df_ranch_sensors['RanchWeatherSensor'] = df5['Sensor Type'].unique()
 
     df_ranch_sensors.to_excel(r"C:\Users\csumagang\Desktop\SmartWash_2020\ranch_weather_sensor_list.xlsx")
+    return

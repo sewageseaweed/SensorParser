@@ -130,11 +130,11 @@ class SensorGUI(QWidget):
         if str(self.combo.currentText()) == "Field" or str(self.combo.currentText()) == "Both":
             message.setText("Currently Processing Field Weather. Do not exit!")
             message.exec_()
-            fieldWeather(self.fname, self.contents, self.radiobutton.type)
+            fieldWeather(self.fname, self.contents.text(), self.radiobutton.type)
         if str(self.combo.currentText()) == "Ranch" or str(self.combo.currentText()) == "Both":
             message.setText("Currently Processing Ranch Weather. Do not exit!")
             message.exec_()
-            ranchWeather(self.fname, self.contents2, self.radiobutton.type)
+            ranchWeather(self.fname, self.contents2.text(), self.radiobutton.type)
         message.setText("Finished! You may exit!")
         message.exec_()
         print('finished Parse')
