@@ -20,19 +20,20 @@ TODO: Make more efficient
 
 
 def metaSamples(path1, path2, type1, type2):
-    if csv:
-        df = pd.read_csv(path1, encoding='unicode_escape', on_bad_lines='skip', skiprows=5)
-    else:
-        df = pd.read_excel(path1)
+    if path1 != "":
+        if type1:
+            df = pd.read_csv(path1, encoding='unicode_escape', on_bad_lines='skip', skiprows=5)
+        else:
+            df = pd.read_excel(path1)
+    if path2 != "":
+        if type2:
+            df2 = pd.read_csv(path2, encoding='unicode_escape', on_bad_lines='skip', skiprows=5)
+        else:
+            df2 = pd.read_excel(path2)
+        df2.rename(columns={"Sample Type": "SampleType", "Sample subtype": "SampleSubType", "Sample Barcode": "Barcode"}, inplace=True)
 
-    if csv2:
-        df2 = pd.read_csv(path2, encoding='unicode_escape')
-    else:
-        df2 = pd.read_excel(path2)
     fieldDF = pd.DataFrame(columns = ['SampleType', 'SampleSubType', 'RawDate', 'SpecificSampler', 'GPS', 'Barcode', 'Media', 'Notes', 'ExperimentsID'])
     fieldresDF = pd.DataFrame(columns = ['Lab', 'Method', 'Date', 'Time', 'SamplesID', 'Result'])
-
-    df2.rename(columns={"Sample Type": "SampleType", "Sample subtype": "SampleSubType", "Sample Barcode": "Barcode"}, inplace=True)
 
     count = 0
 
@@ -44,16 +45,20 @@ def metaSamples(path1, path2, type1, type2):
             if len(desc) == 2:
                 if desc[1].strip() == row['Barcode']:
                     if not check:
-                        new_row = pd.Series(data={'SampleType': row['SampleType'], 'SampleSubType': row['SampleSubType'], 'RawDate': row['Date'], 'SpecificSampler': row['UserName'], 'GPS': row['GPS'], 'Barcode': row['Barcode'], 'Media': row['Picture: of sample'], 'Notes': row['Notes']})
-                        fieldDF = fieldDF.append(new_row, ignore_index=True)
-                        check = True
-                    dateTime = inner_row['Date Received'].split()
-                    new_row = pd.Series(data={'Lab': inner_row['Lab'], 'Method': inner_row['Method'], 'Date': dateTime[0], 'Time': dateTime[1], 'SamplesID': 0, 'Result': inner_row['Test Result']})
-                    fieldresDF = fieldresDF.append(new_row, ignore_index=True)
+                        if path1 != "":
+                            new_row = pd.Series(data={'SampleType': row['SampleType'], 'SampleSubType': row['SampleSubType'], 'RawDate': row['Date'], 'SpecificSampler': row['UserName'], 'GPS': row['GPS'], 'Barcode': row['Barcode'], 'Media': row['Picture: of sample'], 'Notes': row['Notes']})
+                            fieldDF = fieldDF.append(new_row, ignore_index=True)
+                            check = True
+                    if path2 != "":
+                        dateTime = inner_row['Date Received'].split()
+                        new_row = pd.Series(data={'Lab': inner_row['Lab'], 'Method': inner_row['Method'], 'Date': dateTime[0], 'Time': dateTime[1], 'SamplesID': 0, 'Result': inner_row['Test Result']})
+                        fieldresDF = fieldresDF.append(new_row, ignore_index=True)
         count += 1
 
-    fieldDF.to_excel(path1 + "_samples.xlsx")
-    fieldresDF.to_excel(path2 + "_samples_results.xlsx")
+    if path1 != "":
+        fieldDF.to_excel(path1 + "_samples.xlsx")
+    if path2 != "":
+        fieldresDF.to_excel(path2 + "_samples_results.xlsx")
     return
 
 
@@ -130,7 +135,7 @@ def fieldWeather(path, start, csv):
                 df3 = df3.append(new_row, ignore_index=True)
                 count += 1
 
-    df3.to_excel(path + "_fieldWeather.xlsx")
+    df3.to_excel(path + "_fieldWeather.xlsx", index=False)
     return
 
 
@@ -161,7 +166,7 @@ def ranchWeather(path, end, csv):
     for i in df2.columns:
         matrix2.append(i.split())
 
-    df3 = pd.DataFrame(columns=['ID', 'Date/Time', 'Sensor Type', 'Sensor Result', 'Unit'])
+    df3 = pd.DataFrame(columns=['RanchID', 'Date/Time', 'RanchWeatherSensor', 'sensorData', 'Unit'])
 
     count2 = 0
     tracker = 0
@@ -192,11 +197,11 @@ def ranchWeather(path, end, csv):
                         sensorResult = 0
                 else:
                     unit = ""
-                new_row = pd.Series(data={'ID': count2, 'Date/Time': row['Date & Time'], 'Sensor Type': sensorType, 'Sensor Result':sensorResult, 'Unit':unit})
+                new_row = pd.Series(data={'RanchID': count2, 'Date/Time': row['Date & Time'], 'RanchWeatherSensor': sensorType, 'sensorData':sensorResult, 'Unit':unit})
                 df3 = df3.append(new_row, ignore_index=True)
                 count2 += 1
 
-    df3.to_excel(path + "_ranchWeather.xlsx")
+    df3.to_excel(path + "_ranchWeather.xlsx", index=False)
     return
 
 
@@ -252,7 +257,7 @@ def createSamples(path, start):
 
 def generateFieldWeatherList():
     df3['Sensor Type'].unique()
-    df_weather_sensors = pd.DataFrame();
+    df_weather_sensors = pd.DataFrame()
     df_weather_sensors['FieldWeatherSensor'] = df3['Sensor Type'].unique
 
     df_weather_sensors.to_excel(r"C:\Users\csumagang\Desktop\SmartWash_2020\field_weather_sensor_list.xlsx")
@@ -263,7 +268,7 @@ def generateFieldWeatherList():
 
 def generateRanchWeatherList():
     df5['Sensor Type'].unique()
-    df_ranch_sensors = pd.DataFrame();
+    df_ranch_sensors = pd.DataFrame()
     df_ranch_sensors['RanchWeatherSensor'] = df5['Sensor Type'].unique()
 
     df_ranch_sensors.to_excel(r"C:\Users\csumagang\Desktop\SmartWash_2020\ranch_weather_sensor_list.xlsx")
