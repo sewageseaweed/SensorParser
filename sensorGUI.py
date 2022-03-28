@@ -17,6 +17,8 @@ class SensorGUI(QWidget):
         self.fname = ''
         self.metafname1 = ''
         self.metafname2 = ''
+        self.metaSensorfname = ''
+        self.metaRanchfname = ''
         #self.setFixedSize(650, 100)
         self.initUI()
 
@@ -61,6 +63,30 @@ class SensorGUI(QWidget):
         self.contents2.setPlaceholderText("Enter End Column # for Ranch Weather")
         self.contents2.setValidator(QIntValidator())
         vbox.addWidget(self.contents2)
+
+        vbox.addWidget(QLabel("\n\ntblSensor File:"))
+
+        vbox.addLayout(hbox)
+        self.metaSensor = QLabel("")
+        vbox.addWidget(self.metaSensor)
+
+        self.metaSensorbtn = QPushButton("Choose tblSensor File:")
+        self.metaSensorbtn.clicked.connect(self.getMetaSensor)
+        vbox.addWidget(self.metaSensorbtn)
+
+        vbox.addWidget(QLabel("\n\ntblRanch File:"))
+
+        vbox.addLayout(hbox)
+        self.metaRanchfile = QLabel("")
+        vbox.addWidget(self.metaRanchfile)
+
+        self.metaRanchfilebtn = QPushButton("Choose tblRanch File:")
+        self.metaRanchfilebtn.clicked.connect(self.getMetaRanch)
+        vbox.addWidget(self.metaRanchfilebtn)
+
+        self.metaRanch = QLineEdit()
+        self.metaRanch.setPlaceholderText("What Ranch Is Your Metadata? (i.e Las Colinas)")
+        vbox.addWidget(self.metaRanch)
 
         self.parseBtn = QPushButton("Parse Information")
         self.parseBtn.clicked.connect(self.parseInfo)
@@ -118,6 +144,14 @@ class SensorGUI(QWidget):
         self.metafname2 = QFileDialog.getOpenFileName(self)[0]
         self.metaFileName2.setText(self.metafname2)
 
+    def getMetaSensor(self):
+        self.metaSensorfname = QFileDialog.getOpenFileName(self)[0]
+        self.metaSensor.setText(self.metaSensorfname)
+
+    def getMetaRanch(self):
+        self.metaRanchfname = QFileDialog.getOpenFileName(self)[0]
+        self.metaRanchfile.setText(self.metaRanchfname)
+
     def printer(self):
         self.fileName.setText(self.fname)
         print(self.fname)
@@ -130,11 +164,11 @@ class SensorGUI(QWidget):
         if str(self.combo.currentText()) == "Field" or str(self.combo.currentText()) == "Both":
             message.setText("Currently Processing Field Weather. Do not exit!")
             message.exec_()
-            fieldWeather(self.fname, self.contents.text(), self.radiobutton.type)
+            fieldWeather(self.fname, self.contents.text(), self.radiobutton.type, self.metaRanchfname, self.metaSensorfname, self.metaRanch.text())
         if str(self.combo.currentText()) == "Ranch" or str(self.combo.currentText()) == "Both":
             message.setText("Currently Processing Ranch Weather. Do not exit!")
             message.exec_()
-            ranchWeather(self.fname, self.contents2.text(), self.radiobutton.type)
+            ranchWeather(self.fname, self.contents2.text(), self.radiobutton.type, self.metaRanchfname, self.metaSensorfname, self.metaRanch.text())
         message.setText("Finished! You may exit!")
         message.exec_()
         print('finished Parse')

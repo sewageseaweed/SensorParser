@@ -65,7 +65,7 @@ def metaSamples(path1, path2, type1, type2):
 # FIELD WEATHER
 
 
-def fieldWeather(path, start, csv):
+def fieldWeather(path, start, csv, ranchPath, sensorPath, ranchName):
     print("HERE I AM")
     if csv:
         df = pd.read_csv(path, encoding='unicode_escape', on_bad_lines='skip', skiprows=5)
@@ -75,6 +75,20 @@ def fieldWeather(path, start, csv):
     renamed = []
     for i in df:
         renamed.append(i.strip())
+
+    ranchDf = pd.read_excel(ranchPath)
+    sensorDf = pd.read_excel(sensorPath)
+
+    ranch_dict = {}
+    sensor_dict = {}
+
+    for index, row in ranchDf.iterrows():
+        ranch_dict[row['RanchName']] = row['RanchID']
+
+    for index, row in sensorDf.iterrows():
+        sensor_dict[row['RanchWeatherSensor']] = row['RanchWeatherSensorID']
+
+    currRanch = ranch_dict['ranchName']
 
     df.columns = renamed
     list(df)
@@ -141,12 +155,28 @@ def fieldWeather(path, start, csv):
 
 # RANCH WEATHER BELOW
 
-def ranchWeather(path, end, csv):
+def ranchWeather(path, end, csv, ranchPath, sensorPath, ranchName):
     end = int(end) + 1
     if csv:
         df = pd.read_csv(path, encoding='unicode_escape', on_bad_lines='skip', skiprows=5)
     else:
         df = pd.read_excel(path)
+
+    ranchDf = pd.read_excel(ranchPath)
+    sensorDf = pd.read_excel(sensorPath)
+
+    ranch_dict = {}
+    sensor_dict = {}
+
+    for index, row in ranchDf.iterrows():
+        ranch_dict[row['RanchName']] = row['RanchID']
+
+    for index, row in sensorDf.iterrows():
+        sensor_dict[row['RanchWeatherSensor']] = row['RanchWeatherSensorID']
+
+    currRanch = ranch_dict[ranchName]
+
+    print(ranch_dict, sensor_dict, currRanch)
 
     renamed = []
     for i in df:
@@ -197,7 +227,7 @@ def ranchWeather(path, end, csv):
                         sensorResult = 0
                 else:
                     unit = ""
-                new_row = pd.Series(data={'RanchID': count2, 'Date/Time': row['Date & Time'], 'RanchWeatherSensor': sensorType, 'sensorData':sensorResult, 'Unit':unit})
+                new_row = pd.Series(data={'RanchID': currRanch, 'Date/Time': row['Date & Time'], 'RanchWeatherSensor': sensor_dict[sensorType], 'sensorData':sensorResult, 'Unit':unit})
                 df3 = df3.append(new_row, ignore_index=True)
                 count2 += 1
 
